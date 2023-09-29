@@ -1,46 +1,90 @@
 # todo-react
 
-Sample todo app built with the React/ReactDOM framework. For the accompanying documentation, see
-[Understanding client-side JavaScript frameworks
-: React tutorials](https://wiki.developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks#React_tutorials).
+## How to add Lenra to your project
 
-For the live version, see https://mdn.github.io/todo-react/.
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Getting started
-
-To get this app running locally, you'll need to have [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/getting-started/install) installed on your machine.
-In the project directory, you can run:
+1. Add Lenra client lib to your project and initialize Lenra app
 
 ```bash
-yarn && yarn start
+npm i @lenra/client
+lenra new -p lenra-app js
 ```
 
-More information about the available commands can be found in the [Contributing](CONTRIBUTING.md) guide.
+2. Create the lenra app object and initialize it in the `index.js` file
 
-## Learn More
+{:data-file="src/index.js"}
+```js
+import { LenraApp } from '@lenra/client';
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+const app = new LenraApp({
+  appName: "Example Client",
+  clientId: "XXX-XXX-XXX",
+});
+```
 
-The following sections are recommended:
+3. Create a react component that will show a button to login to Lenra that take as params the `app` object
 
-- [Code Splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-- [Analyzing the Bundle Size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-- [Making a Progressive Web App](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-- [Advanced Configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-- [Deployment](https://facebook.github.io/create-react-app/docs/deployment)
-- [npm run build fails to minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+{:data-file="src/Login.js"}
+```js
+import React from 'react';
+import { LenraApp } from '@lenra/client';
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-## Contributing
+/**
+ * @param {{ app: LenraApp }} props
+ */
+export default function Login({ app }) {
+	/**
+	 * @type {LenraApp}
+	 */
+	return (
+		<div style={{
+		  display: "flex",
+		  flexDirection: "column",
+		  alignItems: "center"
+		  }}>
+			<button onClick={onLogin(app)} style={{
+			  border: "1px solid black",
+			  padding: "5px",
+			  margin: "10px 0px"
+			  }}>Login</button>
+		</div>
+	);
+}
+```
 
-Our project welcomes contributions from any member of our community.
-To get started contributing, please see our [Contributor Guide](CONTRIBUTING.md).
+4. Add the function call on the button that will handle the login on the click event.
 
-By participating in and contributing to our projects and discussions, you acknowledge that you have read and agree to our [Code of Conduct](CODE_OF_CONDUCT.md).
+{:data-file="src/Login.js"}
+```js
+<button onClick={()=>app.connect()} /* [...] */ />
+```
 
-## License
 
-This project is licensed under the [LICENSE](LICENSE).
+6. Check if the app is connected in the `root.render` from the  `index.js` file.
+
+{:data-file="src/index.js"}
+```js
+root.render(
+  <React.StrictMode>
+    {app.lenraSocket?.isConnected() ? (<App app={app} tasks={DATA} />) : (<Login app={app} />)}
+  </React.StrictMode>
+);
+```
+
+7. Start the react app
+
+```bash
+npm start
+```
+
+8. In another terminal, start the lenra devtool
+
+```bash
+lenra dev
+```
+
+9. Open the react app and click on the login button when the devtool is healthy.
+
+10. You should see a popup openning and quickly closing itself. If you see this, you are connected to Lenra.
+11. You are now successfully connected to your app.
+12.
