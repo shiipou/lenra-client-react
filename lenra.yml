@@ -1,4 +1,5 @@
 componentsApi: "1.0"
+path: lenra-app
 generator:
   dofigen:
     builders:

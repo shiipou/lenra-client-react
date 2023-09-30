@@ -1,26 +1,25 @@
 'use strict'
 
-import { Counter } from "../classes/Counter.js";
+import { Filter } from "../classes/Filter.js";
 
 /**
- * 
- * @param {import("@lenra/app").} _props 
- * @param {import("@lenra/app").event} _event 
- * @param {import("@lenra/app").Api} api 
+ *
+ * @param {import("@lenra/app").} _props
+ * @param {import("@lenra/app").event} _event
+ * @param {import("@lenra/app").Api} api
  */
 export async function onEnvStart(_props, _event, api) {
-    await createCounter(api, "global");
 }
 
 export async function onUserFirstJoin(_props, _event, api) {
-    await createCounter(api, "@me");
+    await createFilter(api, "@me");
 }
 
-async function createCounter(api, user) {
-    const counterColl = api.data.coll(Counter);
-    let counters = await counterColl.find({ user })
-    if (counters.length == 0) {
-        await counterColl.createDoc(new Counter(user, 0))
+async function createFilter(api, user) {
+    const filterColl = api.data.coll(Filter);
+    let filters = await filterColl.find({ user })
+    if (filters.length == 0) {
+        await filterColl.createDoc(new Filter(user))
     }
 }
 

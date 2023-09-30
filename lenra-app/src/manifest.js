@@ -1,5 +1,5 @@
 import { View } from "@lenra/app";
-import { Counter } from "./classes/Counter.js";
+import { Todo } from "./classes/Todo.js";
 
 /**
  * @type {import("@lenra/app").Manifest["json"]}
@@ -7,14 +7,14 @@ import { Counter } from "./classes/Counter.js";
 export const json = {
     routes: [
         {
-            path: "/counter/global",
-            view: View("counter").find(Counter, {
-                "user": "global"
+            path: "/filters",
+            view: View("filters").find("", {
+                "user": "@me"
             })
         },
         {
-            path: "/counter/me",
-            view: View("counter").find(Counter, {
+            path: "/todos",
+            view: View("todos").find(Todo, {
                 "user": "@me"
             })
         }

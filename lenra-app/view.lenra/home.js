@@ -1,10 +1,10 @@
 import { DataApi, Flex, View } from "@lenra/app";
-import { Counter } from "../../classes/Counter.js";
+import { Todo } from "../../classes/Counter.js";
 
 export default function (_data, _props) {
     return Flex([
         View("lenra.counter")
-            .find(Counter, {
+            .find(Todo, {
                 user: "@me"
             })
             .props({ text: "My personnal counter" }),
@@ -19,4 +19,3 @@ export default function (_data, _props) {
         .mainAxisAlignment("spaceEvenly")
         .crossAxisAlignment("center")
 }
-

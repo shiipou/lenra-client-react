@@ -1,15 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
-
-import { LenraSocket, ListenerCall } from "@lenra/client";
+import React, { useState, useEffect } from "react";
 
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
-import { nanoid } from "nanoid";
 
 /**
  *
- * @param {LenraSocket}
+ * @param {{ router: LenraSocket }}
  * @returns
  */
 function List({ router }) {
@@ -18,18 +15,22 @@ function List({ router }) {
   const [addTask, setAddTask] = useState(null);
   const [filters, setFilters] = useState([]);
   const [currentFilter, setCurrentFilter] = useState(0);
+  const [todosRoute, setTodosRoute] = useState(null);
+  const [filtersRoute, setFiltersRoute] = useState(null);
 
-  const todosRoute = router.route("/todos", ({ tasks, onAdd }) => {
-    console.log(arguments);
-    setTasks(tasks);
-    setAddTask(onAdd);
-  });
+  useEffect(() => {
+    setTodosRoute(router.route("/todos", ({ tasks, onAdd }) => {
+      setTasks(tasks);
+      setAddTask(onAdd);
+    }))
+    setFiltersRoute(router.route("/filters", ({ current, filters }) => {
+      setFilters(filters);
+      setCurrentFilter(current);
+    }))
+  }, [router]);
 
-  const filterRoute = router.route("/filters", ({ current, filters }) => {
-    console.log(arguments);
-    setFilter(filters);
-    setCurrentFilter(current);
-  });
+  console.log(todosRoute)
+  console.log(filtersRoute)
 
   const taskList = tasks
     .map((task) => (
@@ -38,35 +39,29 @@ function List({ router }) {
         name={task.name}
         completed={task.completed}
         key={task.id}
-        toggleTaskConullmpleted={()=>ListenerCall(todosRoute, task.onToggle)}
-        deleteTask={()=>ListenerCall(todosRoute, task.onDelete)}
-        editTask={()=>ListenerCall(todosRoute, task.onEdit)}
+        toggleTaskConullmpleted={() => todosRoute.callListener(task.onToggle)}
+        deleteTask={() => todosRoute.callListener(task.onDelete)}
+        editTask={(name) => todosRoute.callListener({...task.onEdit, event: { value: name }})}
       />
     ));
 
-  const filterList = FILTER_NAMES.map((filter, i) => (
+  const filtersList = filters.map((filter, i) => (
     <FilterButton
       key={filter.name}
       name={filter.name}
       isPressed={currentFilter === i}
-      setFilter={()=>ListenerCall(todosRoute, filter.onSelect)}
+      setFilter={()=>filtersRoute.callListener(filter.onSelect)}
     />
   ));
 
   const tasksNoun = taskList.length !== 1 ? "tasks" : "task";
   const headingText = `${taskList.length} ${tasksNoun} remaining`;
 
-  useEffect(() => {
-    if (tasks.length - prevTaskLength === -1) {
-      listHeadingRef.current.focus();
-    }
-  }, [tasks.length, prevTaskLength]);
-
   return (
     <div>
-      <Form addTask={() => todosRoute.callListener({ addTask, event: {} })} />
-      <div className="filters btn-group stack-exception">{filterList}</div>
-      <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
+      <Form addTask={(name) => todosRoute.callListener({ ...addTask, event: { value: {name} } })} />
+      <div className="filters btn-group stack-exception">{filtersList}</div>
+      <h2 id="list-heading" tabIndex="-1">
         {headingText}
       </h2>
       <ul
