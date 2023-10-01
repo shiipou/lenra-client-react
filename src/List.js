@@ -5,7 +5,6 @@ import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 
 /**
- *
  * @param {{ router: LenraSocket }}
  * @returns
  */
