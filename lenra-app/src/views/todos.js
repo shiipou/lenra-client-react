@@ -25,7 +25,7 @@ export default function todos (todos, _props) {
         id: todo._id
       })
     })),
-    onAdd: Listener("addTodo")
+    addTask: Listener("addTodo")
       .props({
         user: "@me"
       })

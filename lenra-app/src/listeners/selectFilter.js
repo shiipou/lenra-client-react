@@ -10,7 +10,7 @@ import { Todo } from "../classes/Todo.js";
  * @returns
  */
 export default async function selectFilter(props, _event, api) {
-    await api.data.coll(Todo).updateMany(props.id, {
+    await api.data.coll(Todo).updateMany({ user: '@me' }, {
         filter: props.filter
     });
 }

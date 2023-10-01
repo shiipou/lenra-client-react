@@ -10,7 +10,7 @@ import { Todo } from "../classes/Todo.js";
  * @returns
  */
 export default async function toggleTodo(props, _event, api) {
-    const todo = await api.data.coll(Todo).getDoc(props.id);
-    todo.state = !todo.state;
-    await api.data.coll(Todo).updateDoc(todo);
+    await api.data.coll(Todo).updateMany({ _id: props.id }, {
+        state: { $not: "$state" }
+    });
 }

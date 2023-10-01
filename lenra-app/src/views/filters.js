@@ -15,7 +15,6 @@ export default function filters([currentFilter], _props) {
       name: key,
       onSelect: Listener("selectFilter")
         .props({
-          id: currentFilter._id,
           filter: value
         })
     }))

@@ -10,7 +10,7 @@ import { Todo } from "../classes/Todo.js";
  * @returns
  */
 export default async function editTodo(props, event, api) {
-    await api.data.coll(Todo).updateMany(props.id, {
+    await api.data.coll(Todo).updateMany({ _id: props.id }, {
         name: event.value.name
     });
 }
