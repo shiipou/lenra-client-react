@@ -385,6 +385,9 @@ The first parameter of the function will be an array of the data returned by the
 
 We can with that return the data we need to display in the UI in your app, but also define some listeners call that will be called when the user will interact with your app using the `Listeners` class from the `@lenra/app` lib. The props passed to the listener will allow you to pass data to the listener call without even letting the user know about it. (No data is sent to the client app)
 
+
+This view will return an object with the `tasks` array that will contain the todos data, on each todos we'll add a listener to update it's state or to delete it. And the `addTask` listener that will be called when the user will add a new todo.
+
 {:data-file="lenra-app/views/todos.js"}
 ```js
 import { Listener } from "@lenra/app";
@@ -421,6 +424,8 @@ export default function todos (todos, _props) {
   };
 }
 ```
+
+This view will return an object with the `filters` array that will contain the filters data which will represent one of the three buttons to filter the todos based on it's state (Show all todos, show only active todos, show only completed todos), on each filter we'll add a listener to update the current filter. And the `selectFilter` listener that will be called when the user will select a new filter.
 
 {:data-file="lenra-app/views/filters.js"}
 ```js
